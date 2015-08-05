@@ -67,6 +67,9 @@ def hasChanged(sourcedirectory, targetdirectory):
     sourcet = latestFileTimestamp(sourcedirectory)
     if sourcet is None:
         print("    There are no files in the source directory to back up")
+        print(''.join(["    Source directory: ", sourcedirectory]))
+        if not os.path.isdir(sourcedirectory):
+            print("    Directory doesn't exist.")
         return False
     targett = latestFileTimestamp(targetdirectory)
     if targett is None:
