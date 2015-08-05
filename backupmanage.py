@@ -1,3 +1,18 @@
+# Billy Rhoades
+# 8/4/15
+#
+# This script creates backups in storagelocation with the name of the key in directories. Only when
+# a file in the value of directories is modified does a new backup get created. The folder for the backups
+# is automatically created where needed. 
+#
+# For reference, if you wanted to add another directory just create another line below the example below like so:
+# directories["key"] = "value"
+# directories["Mass Effect"] = "C:\Program Files (x86)\EA Games\Mass Effect\Saved Games\"
+#
+# With no wildcard specified at the end of the value, the script will grab the entire folder. If you put a *
+# afterwards, only the files in that folder recursively will be grabbed. The backups will be stored in the folder
+# "Mass Effect" as a subdirectory of config["storagelocation"]. 
+
 import os, sys, datetime
 from subprocess import call
 
