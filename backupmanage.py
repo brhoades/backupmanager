@@ -16,25 +16,35 @@
 import os, sys, datetime
 from subprocess import call
 
-#Config
 directories = dict()
 config = dict()
+
+##################################
+# Configuration Starts Here
 #
-#directories to backup
-#Format: directories["backupfoldername"] = "backup source"
+# Directories to backup. You can list as many of these as you like in the same format.
+#   Wildcards cause those files to save at the top of the 7z file. Without them, Saved Games below
+#   becomes THE first file in the 7z file.
+# directories["backupfoldername"] = "backup source"
+# directories["Mass Effect"] = "C:\Program Files (x86)\EA Games\Mass Effect\Saved Games\"
+# directories["Terraria"] = "/home/billy/.steam/steam/SteamApps/common/Terraria/Savefiles/*""
 #
 directories["tempbackup1 name"] = "/tmp/backupdir1/"
 
-# Date format
+# Date format. This follows Unix date format if you want more details.
 config["backupformat"] = "%Y%m%d_%H%M%S"
 
-# Target backup folder, where we store all of the backups
+# Target backup folder, where we store all of the backups. Subdirectories go in here.
 config["storagelocation"] = "/mnt/storage/backups/"
 
 # 7-Zip binary location
+# FIX THIS and choose the one that works for you. You need double backslashes here.
 # config["7z"] = "C:\\Program Files (x86)\\7-zip\\7z.exe"
 # config["7z"] = "C:\\Program Files\\7-zip\\7z.exe"
 config["7z"] = "/usr/bin/7z"
+#
+# Configuration Ends Here
+##################################
 
 
 def backup(config, directories):
