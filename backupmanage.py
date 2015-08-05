@@ -65,9 +65,16 @@ def backup(config, directories):
 #   Returns true if the sourcedirectory is newer, false if same or not.
 def hasChanged(sourcedirectory, targetdirectory):
     sourcet = latestFileTimestamp(sourcedirectory)
+    if sourcet is None:
+        print("    There are no files in the source directory to back up")
+        return False
     targett = latestFileTimestamp(targetdirectory)
+    if targett is None:
+        print("    This is the first backup")
+        return True
 
-    return targett == None or sourcet > targett
+
+    return sourcet > targett
 
 def updateBackup(sourcedirectory, targetdirectory, config):
     print("  Creating new backup...")
@@ -91,7 +98,6 @@ def latestFileTimestamp(directory):
     filelist.sort(key=lambda f: os.stat(f).st_mtime)
 
     if len(filelist) == 0:
-        print("  There are no backups made")
         return None # there are no backups
     return datetime.datetime.fromtimestamp(os.stat(filelist[-1]).st_mtime)
     
