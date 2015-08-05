@@ -14,9 +14,10 @@
 # "Mass Effect" as a subdirectory of config["storagelocation"]. 
 #
 # To run this with task scheduler in Windows, you will need to path to pythonw.exe. For example, the top field for
-# the executable file will be similar to "C:\Python34\pythonw.exe". The second field, with arguments, will be the
-# full path to this script (which can be located anywhere). This script does not need to be ran as System as long
-# as you use pythonw, which won't open anything.
+# task scheduler, "Program/Script" will be similar to "C:\Python34\pythonw.exe" (pythonw.exe). 
+# The second field, the optional additional arguments,, will be the  full path to this script 
+# (which can be located anywhere). This script does not need to be ran as System as long  as you use pythonw, 
+# which won't open anything.
 
 import os, sys, datetime
 from subprocess import call
