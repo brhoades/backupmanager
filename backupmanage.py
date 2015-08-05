@@ -14,10 +14,9 @@
 # "Mass Effect" as a subdirectory of config["storagelocation"]. 
 #
 # To run this with task scheduler in Windows, you will need to path to pythonw.exe. For example, the top field for
-# task scheduler, "Program/Script" will be similar to "C:\Python34\pythonw.exe" (pythonw.exe). 
-# The second field, the optional additional arguments,, will be the  full path to this script 
-# (which can be located anywhere). This script does not need to be ran as System as long  as you use pythonw, 
-# which won't open anything.
+# task scheduler, "Program/Script", will be similar to "C:\Python34\pythonw.exe" (whereever pythonw.exe is). 
+# The second field, "add arguments",  will be the  full path to this script  (which can be located anywhere). 
+# This script does not need to be ran as System as long  as you use pythonw, which won't open any prompts.
 
 import os, sys, datetime
 from subprocess import call
@@ -41,6 +40,7 @@ directories["tempbackup1 name"] = "/tmp/backupdir1/"
 config["backupformat"] = "%Y%m%d_%H%M%S"
 
 # Target backup folder, where we store all of the backups. Subdirectories go in here.
+#config["storagelocation"] = "C:\\Users\\Billy\\Dropbox\\Saved Games\\"
 config["storagelocation"] = "/mnt/storage/backups/"
 
 # 7-Zip binary location
