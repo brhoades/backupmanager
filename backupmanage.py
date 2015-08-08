@@ -18,7 +18,7 @@
 # The second field, "add arguments",  will be the  full path to this script  (which can be located anywhere). 
 # This script does not need to be ran as System as long  as you use pythonw, which won't open any prompts.
 
-import os, sys, datetime
+import os, sys, datetime, tarfile, lzma
 from subprocess import call
 
 directories = dict()
@@ -28,27 +28,31 @@ config = dict()
 # Configuration Starts Here
 #
 # Directories to backup. You can list as many of these as you like in the same format.
-#   Wildcards cause those files to save at the top of the 7z file. Without them, Saved Games below
-#   becomes THE first file in the 7z file.
-# directories["backupfoldername"] = "backup source"
-# directories["Mass Effect"] = "C:\Program Files (x86)\EA Games\Mass Effect\Saved Games\"
-# directories["Terraria"] = "/home/billy/.steam/steam/SteamApps/common/Terraria/Savefiles/*""
-#
-directories["tempbackup1 name"] = "/tmp/backupdir1/"
+#   WINDOWS NOTE: You must use double backslashes on all quotes. Alternatively, you can use
+#   os.path.join(["C:", "Folder", "Folder"]).
+# Format:
+#   directories["backupfoldername"] = "backup source"
+# Examples: 
+#   directories["Mass Effect"] = "C:\\Program Files (x86)\\EA Games\\Mass Effect\\Saved Games"
+#   directories["BF4"] = os.path.join(["C:", "Program Files", "Battlefield 4", "Saves"])
+#   directories["Terraria"] = "/home/billy/.steam/steam/SteamApps/common/Terraria/Savefiles"
+directories["tempbackup1 name"] = "/tmp/backmeup/"
+
+# Preserve directory hierarchy boolean
+# If you want to see in the archive your directories, ie the archive starts with tmp
+# then backmeup, and THEN your files, choose True. Otherwise False.
+config["preservehierarchy"] = False
 
 # Date format. This follows Unix date format if you want more details.
-config["backupformat"] = "%Y%m%d_%H%M%S"
+config["backupformat"] = "_%Y-%m-%d_%H-%M-%S"
 
 # Target backup folder, where we store all of the backups. Subdirectories go in here.
 #config["storagelocation"] = "C:\\Users\\Billy\\Dropbox\\Saved Games\\"
 config["storagelocation"] = "/mnt/storage/backups/"
 
-# 7-Zip binary location
-# FIX THIS and choose the one that works for you. You need double backslashes here.
-# config["7z"] = "C:\\Program Files (x86)\\7-zip\\7z.exe"
-# config["7z"] = "C:\\Program Files\\7-zip\\7z.exe"
-config["7z"] = "/usr/bin/7z"
-#
+# Basename for all files... What goes before the timestamp
+config["basename"] = "backup"
+
 # Configuration Ends Here
 ##################################
 
@@ -89,10 +93,17 @@ def updateBackup(sourcedirectory, targetdirectory, config):
     print("  Creating new backup...")
     os.makedirs(targetdirectory, exist_ok=True)
     
-    backupname = ''.join(["backup-", 
-        latestFileTimestamp(sourcedirectory).strftime(config["backupformat"])])
+    backupname = ''.join([config["basename"], 
+        latestFileTimestamp(sourcedirectory).strftime(config["backupformat"]), '.tar.xz'])
     backupfull = os.path.join(targetdirectory, backupname)
-    call([config["7z"], "a", "-t7z", "-m0=lzma2", "-mx=9", "-aoa", backupfull, sourcedirectory])
+
+    file = lzma.LZMAFile(backupfull, mode='w')
+
+    with tarfile.open(mode='w', fileobj=file) as xz:
+        if config['preservehierarchy']:
+            xz.add(sourcedirectory)
+        else:
+            xz.add(sourcedirectory, arcname='')
     print("  Backup created")
 
 
